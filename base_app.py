@@ -96,6 +96,7 @@ def main():
         fig.update_layout(title='Frequency of Sentiments', title_x=0.5)
         st.plotly_chart(fig, use_container_width=True)
         st.subheader("Tweets Analysis")
+        nltk.download('punkt')
         words = raw['message'].apply(nltk.word_tokenize)
         all_words = [word for sublist in words for word in sublist]
         frequency_dist = nltk.FreqDist(all_words)
