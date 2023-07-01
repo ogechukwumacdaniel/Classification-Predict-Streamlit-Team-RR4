@@ -21,10 +21,31 @@ raw = pd.read_csv("resources/train.csv")
 
 # The main function where we will build the actual app
 def main():
+    
     """Tweet Classifier App with Streamlit"""
-
+    image = st.image("resources/logo.jpg", use_column_width=False)
     # Set the title and subheader of the app
-    st.title("TeamExcel Tweeet Classifier")
+    st.title("Zantech Tweeet Classifier")
+    image_width = 100  # Adjust the width as needed
+    image_height = 100  # Adjust the height as needed
+
+# Apply CSS to position the image to the left of the title
+    st.markdown(
+        f"""
+        <style>
+        .title-wrapper {{
+        display: flex;
+        align-items: center;
+        }}
+        .title-wrapper img {{
+        margin-right: 10px;  # Adjust the margin as needed
+        width: {image_width}px;
+        height: {image_height}px;
+        }}
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
     st.subheader("Climate change tweet classification")
 
     # Create sidebar with selection box
@@ -56,9 +77,9 @@ def main():
             predictor = joblib.load(selected_model)
             prediction = predictor.predict(vect_text)
 
-            # Mapping of sentiment labels to human-readable descriptions
+            # Mapping of sentiment labels to human-readable description
             sentiment_mapping = {
-                -1: "Anti Climate Change",
+                -1: "Pro Climate Change",
                 0: "Neutral About Climate Change Belief",
                 1: "Pro Climate Change",
                 2: "News (Informative Broadcast)"
@@ -67,16 +88,6 @@ def main():
 
             # Display the prediction and its description
             st.success("Prediction: {}".format(prediction_description))
-
-            # Additional information based on sentiment
-            if prediction[0] == -1:
-                st.warning("This tweet indicates a negative sentiment towards climate change.")
-            elif prediction[0] == 0:
-                st.info("This tweet indicates a neutral sentiment towards climate change.")
-            elif prediction[0] == 1:
-                st.success("This tweet indicates a positive sentiment towards climate change.")
-            elif prediction[0] == 2:
-                st.info("This tweet is news or an informative broadcast related to climate change.")
     # Building the EDA page
     if selection == "Data Analysis":
         st.info("Exploratory Data Analysis")
@@ -96,7 +107,6 @@ def main():
         fig.update_layout(title='Frequency of Sentiments', title_x=0.5)
         st.plotly_chart(fig, use_container_width=True)
         st.subheader("Tweets Analysis")
-        nltk.download('punkt')
         words = raw['message'].apply(nltk.word_tokenize)
         all_words = [word for sublist in words for word in sublist]
         frequency_dist = nltk.FreqDist(all_words)
@@ -104,6 +114,7 @@ def main():
         fig = px.bar(temp, x='word', y='count', title='Top words')
         fig.update_layout(xaxis_tickangle=90)
         st.plotly_chart(fig, use_container_width=True)
+        df_anti = raw[raw['sentiment']==-1]
         df_neutral = raw[raw['sentiment']==0]
         df_pro = raw[raw['sentiment']==1]
         df_news = raw[raw['sentiment']==2]
@@ -146,8 +157,8 @@ def main():
         st.pyplot(fig)
     if selection == "Team":
         st.subheader('Team Excel')
-        st.text("""Introducing Team Excel, an innovative AI company at the forefront of transforming industries globally. With a team of skilled experts, we harness the power of advanced algorithms, machine learning, and natural language processing to pioneer groundbreaking solutions. Whether it's personalized virtual assistants, data analytics, or automation, our goal is to empower businesses to flourish in the digital age. Come and join us on this transformative journey towards success.""")
-        st.text("""Ayodele Marcus\t\tTeam Lead\n\nMacDaniel Ogechukwu\tTech Lead\n\nOnyeka Ekese\t\tAdmin Lead\n\nChege Kennedy\t\tAss. Project\n\nGideon Odekina\t\tAss. Tech\n\nTolulope Toluwade\tAss. Admin""")
+        st.text("""Introducing Zantech, an innovative AI company at the forefront of transforming industries globally. With a team of skilled experts, we harness the power of advanced algorithms, machine learning, and natural language processing to pioneer groundbreaking solutions. Whether it's personalized virtual assistants, data analytics, or automation, our goal is to empower businesses to flourish in the digital age. Come and join us on this transformative journey towards success.""")
+        st.text("""Ayodele Marcus\t\tTeam Lead\n\nMacDaniel Ogechukwu\tTech Lead\n\nOnyeka Ekesi\t\tAdmin Lead\n\nChege Kennedy\t\tAss. Project\n\nGideon Odekina\t\tAss. Tech\n\nTolulope Toluwade\tAss. Admin""")
         
 
 # Required to let Streamlit instantiate our web app.
